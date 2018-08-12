@@ -38,9 +38,15 @@ def get_list_songs(listid):
         song['name']   = s['name']
         song['id']     = s['id']
         song['url']    = get_song_url(s['id'])
+        song['lyric']    = get_song_lyric(s['id'])
         song['pic']    = s['album']['picUrl']
         songs.append(song)
     return songs
 
 def get_song_url(songid):
-    return json.loads(main(song_url([songid])))['data'][0]['url']
+    return 'http://music.163.com/song/media/outer/url?id='+str(songid)+'.mp3'
+    #return json.loads(main(song_url([songid])))['data'][0]['url']
+
+def get_song_lyric(songid):
+    l = json.loads(main(song_lyric(songid)))
+    return {'lyric': str(l.get('lrc',{}).get('lyric','null')), 'tlyric': str(l.get('tlyric',{}).get('lyric','null'))}

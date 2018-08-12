@@ -15,3 +15,8 @@ def song_url(songid):
     url = 'https://music.163.com/weapi/song/enhance/player/url'
     first_param = '{ids:"%s",br:128000,csrf_token:""}' %songid
     return url, first_param
+
+def song_lyric(songid):
+    url = 'https://music.163.com/weapi/song/lyric'
+    first_param = '{"id":%s,"lv":-1,"tv":-1,"csrf_token":""}' %songid
+    return url, first_param

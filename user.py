@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- #
 import json
 from spider import main
 from com_params import *
@@ -29,6 +30,7 @@ def get_user_lists(userid):
     return lists
 
 def get_list_songs(listid):
+    print("获取歌单歌曲...")
     detail = json.loads(main(list_song(listid)))['result']['tracks']
     songs = []
     #仅获取歌单createTime，playCount，id
@@ -49,4 +51,4 @@ def get_song_url(songid):
 
 def get_song_lyric(songid):
     l = json.loads(main(song_lyric(songid)))
-    return {'lyric': str(l.get('lrc',{}).get('lyric','null')), 'tlyric': str(l.get('tlyric',{}).get('lyric','null'))}
+    return {'lyric': l.get('lrc',{}).get('lyric',''), 'tlyric': l.get('tlyric',{}).get('lyric','')}

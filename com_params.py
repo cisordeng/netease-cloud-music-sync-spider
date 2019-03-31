@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- #
 # 由user id获取lists id
 def user_list(userid):
     url = 'https://music.163.com/weapi/user/playlist'

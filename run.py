@@ -1,8 +1,34 @@
-from writer import writer
+# -*- coding: utf-8 -*- #
+
+from config import *
+import user
+import conn
+
+# lists = user.get_user_lists(NID)
+# total = len(lists)
+# lists.reverse()
+# for i, l in enumerate(lists):
+#     print("写入歌单>>[ " + l['name'] + " ]<<  " + str(i + 1) + "/" + str(len(lists)))
+#     conn.insert_list(nid=int(l['id']), name=l['name'], avatar=l['pic'])
 
 
-writer('../netease-cloud-music.json', 347204164)
+lists = user.get_user_lists(NID)
+lists.reverse()
+for li, l in enumerate(lists):
+    print("写入歌单>>[ " + l['name'] + " ]<<  " + str(li + 1) + "/" + str(len(lists)))
+    list_id = conn.insert_list(nid=int(l['id']), name=l['name'], avatar=l['pic'])
+
+    songs = user.get_list_songs(l['id'])
+    songs.reverse()
+    for si, s in enumerate(songs):
+        print("写入单曲>>[ " + s['name'] + " ]<<  " + str(si + 1) + "/" + str(len(songs)))
+        song_id = conn.insert_song(nid=int(s['id']), name=s['name'], avatar=s['pic'], url=s['url'], lyric=s['lyric']['lyric'], translated_lyric=s['lyric'].get('tlyric', ''), singer_name=s['singer'])
+        conn.insert_list_song(list_id, song_id)
 
 
-#https://music.163.com/weapi/login/cellphone
-#{"phone":"18355095618","password":"iu0adc3949ba59abbe56e057f20f883e","rememberLogin":"true","checkToken":"9ca17ae2e6ffcda170e2e6eed8f04eb8edb88cd750a788bf94e860b19a89b3c44eb4bafab8e621b2ba9c9af42af0feaec3b92aeda9a8b0b221a5ab8a8fe640e98ab790ae65a8958ebbbc40a58f8a84d63b8fedee9e","csrf_token":""}
+# song['singer'] = '/'.join([si['name'] for si in s['artists']])
+# song['name'] = s['name']
+# song['id'] = s['id']
+# song['url'] = get_song_url(s['id'])
+# song['lyric'] = get_song_lyric(s['id'])
+# song['pic'] = s['album']['picUrl']

@@ -2,6 +2,8 @@
 import pymysql
 from config import *
 
+SONG_INDEX = 0
+LIST_INDEX = 0
 
 conn = pymysql.connect(
     host=DB_HOST,
@@ -31,13 +33,21 @@ def insert_song(nid, name, avatar, url, lyric, translated_lyric, singer_name):
 
 def insert_list(nid, name, avatar):
     snid = str(nid)
-    sql = "insert into rhythm_rhythm_set(nid, name, avatar) values(%s, %s, %s)"
-    return commit_sql(sql, (nid, name, avatar))
+    sql = "insert into rhythm_rhythm_set(nid, name, avatar, `index`) values(%s, %s, %s, %s)"
+    global LIST_INDEX
+    LIST_INDEX += 1
+    return commit_sql(sql, (nid, name, avatar, LIST_INDEX))
 
 
 def insert_list_song(rhythm_set_id, rhythm_id):
-    sql = "insert into rhythm_rhythm_set_rhythm(rhythm_set_id, rhythm_id) values(%s, %s)"
-    return commit_sql(sql, (str(rhythm_set_id), str(rhythm_id)))
+    sql = "insert into rhythm_rhythm_set_rhythm(rhythm_set_id, rhythm_id, `index`) values(%s, %s, %s)"
+    global LIST_INDEX
+    global SONG_INDEX
+    if rhythm_set_id == LIST_INDEX:
+        SONG_INDEX += 1
+    else:
+        SONG_INDEX = 0
+    return commit_sql(sql, (str(rhythm_set_id), str(rhythm_id), SONG_INDEX))
 
 
 def commit_sql(sql, values):

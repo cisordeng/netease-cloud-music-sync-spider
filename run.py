@@ -14,6 +14,8 @@ import conn
 
 lists = user.get_user_lists(NID)
 lists.reverse()
+if RESET_TABLE:
+    conn.reset_table()
 for li, l in enumerate(lists):
     print("写入歌单>>[ " + l['name'] + " ]<<  " + str(li + 1) + "/" + str(len(lists)))
     list_id = conn.insert_list(nid=int(l['id']), name=l['name'], avatar=l['pic'])

@@ -14,6 +14,29 @@ conn = pymysql.connect(
     charset='utf8',
 )
 
+def reset_table():
+    drop_sql = "drop table if exists rhythm_rhythm, rhythm_rhythm_set, rhythm_rhythm_set_rhythm;"
+    new_sql = '''create table rhythm_rhythm(id int auto_increment primary key, nid bigint default 0 not null, name varchar(255) default '' not null, avatar varchar(255) default '' not null, url varchar(255) default '' not null, lyric longtext not null, translated_lyric longtext not null, singer_name varchar(255) default '' not null, played_count int default 0 not null, created_at datetime default CURRENT_TIMESTAMP not null);create table rhythm_rhythm_set(id int auto_increment primary key, nid bigint default 0 not null, name varchar(255) default '' not null, avatar varchar(255) default '' not null, played_count int default 0 not null, created_at datetime default CURRENT_TIMESTAMP not null, `index` int default 0 not null);create table rhythm_rhythm_set_rhythm(id int auto_increment primary key, rhythm_set_id int default 0 not null, rhythm_id int default 0 not null, created_at datetime default CURRENT_TIMESTAMP not null, `index` int default 0 not null)'''
+    try:
+        cursor = conn.cursor()
+        cursor.execute(drop_sql)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        print("error rollback!")
+    try:
+        cursor = conn.cursor()
+        for sql in new_sql.split(';'):
+            sql = sql.strip()
+            if len(sql) > 0:
+                cursor.execute(sql)
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(e)
+        print("error rollback!")
+
 def insert_song(nid, name, avatar, url, lyric, translated_lyric, singer_name):
     snid = str(nid)
     if not lyric:

@@ -7,7 +7,7 @@ def user_list(userid):
 
 # 由list id获取songs id
 def list_song(listid):
-    url = 'https://music.163.com/weapi/playlist/detail'
+    url = 'https://music.163.com/weapi/v6/playlist/detail'
     first_param = '{"id":"%s", "csrf_token":""}' %listid
     return url, first_param
 

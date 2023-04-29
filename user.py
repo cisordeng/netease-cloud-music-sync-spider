@@ -31,17 +31,17 @@ def get_user_lists(userid):
 
 def get_list_songs(listid):
     print("获取歌单歌曲...")
-    detail = json.loads(main(list_song(listid)))['result']['tracks']
+    detail = json.loads(main(list_song(listid)))['playlist']['tracks']
     songs = []
     #仅获取歌单createTime，playCount，id
     for s in detail:
         song = {} # 重新初始化申请内存，避免每次添加的song均为最后一项
-        song['singer'] = '/'.join([si['name'] for si in s['artists']])
+        song['singer'] = '/'.join([si['name'] for si in s['ar']])
         song['name']   = s['name']
         song['id']     = s['id']
         song['url']    = get_song_url(s['id'])
         song['lyric']    = get_song_lyric(s['id'])
-        song['pic']    = s['album']['picUrl']
+        song['pic']    = s['al']['picUrl']
         songs.append(song)
     return songs
 
